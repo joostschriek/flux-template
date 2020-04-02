@@ -19,15 +19,28 @@ Download Instructions: https://github.com/helm/helm/releases
 Download Instructions: https://github.com/bitnami-labs/sealed-secrets/releases
 ```
 
+### **Update the template address**
 
-
-
-
+Note that fluxcd works better with a ssh url.
+```
+$ sed -i.bak 's/git@github.com:ahanafy\/flux-template/<your git repo>/' flux-patch.yaml
+```
 
 ## **Deploy**
 
+When running in GKE, we have to setup a clusterrolebinding. This can be done by running
 ```
-./scripts/flux-init.sh https://github.com/username/reponame.git
+./scripts/flux-gke-prep.sh
+```
+
+You can run the init script without specifying the repo (it will look at the remote origin used). 
+```
+./scripts/flux-init.sh
+```
+
+If you checked out over https, flux really likes ssh, so you should run the init script with the repository argument.
+```
+./scripts/flux-init.sh -r git@github.com:username/reponame.git
 ```
 
 ## **Bookinfo**
