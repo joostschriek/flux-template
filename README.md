@@ -43,6 +43,36 @@ If you checked out over https, flux really likes ssh, so you should run the init
 ./scripts/flux-init.sh -r git@github.com:username/reponame.git
 ```
 
+## **Accessing the application**
+
+Now that we've deployed the infrastructure and the app, it's time to figure out how to access the app. In this example we're using an istio VirtualService which uses a `xip.io` route. You can see [the defintion here](https://github.com/ahanafy/bookinfo-kustomize/blob/master/bookinfo/networking/virtualservice.yaml#L7). What we need to do is tell kustomize to patch the route part of the VirtualService with our own IP so that we can access the app.
+
+First we have to figure out our LoadBalancer IP. We can do this with the following command (or you can look in the GCP web console).
+```
+kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
+
+Now that we have the ip, we can create a new manifest ~~patch~~ file for the already existing VirtualService in the current repo.
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bookinfo
+spec:
+  hosts:
+  - "bookinfo.<insert your ip here>.xip.io"
+```
+
+Name this someting approporiate (e.g. `virtualservice-patch.yaml`) and then put it in the [bookinfo-team](https://github.com/ahanafy/flux-template/tree/master/bookinfo-team) folder. 
+
+To get kustomize to see this and compose the correct yaml file, we have to add a [merge strategy](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-api-machinery/strategic-merge-patch.md) to our kustomize.yaml. Open up the kustoimze file in the bookinfo-team and append the following lines
+```yaml
+patchesStrategicMerge:
+  - virtualservice-patch.yaml
+```
+
+Now we only need to commit & push it, and see fluxcd do it's magic. We should soon be able to login with our new custom xip.io url. You'll want to repeat this for the windows-team as well.
+
 ## **Bookinfo**
 
 To check out the bookinfo test page and run sustained GET requests
