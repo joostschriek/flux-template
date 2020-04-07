@@ -63,7 +63,7 @@ spec:
   - "bookinfo.<insert your ip here>.xip.io"
 ```
 
-Name this someting approporiate (e.g. `virtualservice-patch.yaml`) and then put it in the [bookinfo-team](https://github.com/ahanafy/flux-template/tree/master/bookinfo-team) folder. 
+Name this something appropriate(e.g. `virtualservice-patch.yaml`) and then put it in the [bookinfo-team](https://github.com/ahanafy/flux-template/tree/master/bookinfo-team) folder. 
 
 To get kustomize to see this and compose the correct yaml file, we have to add a [merge strategy](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-api-machinery/strategic-merge-patch.md) to our kustomize.yaml. Open up the kustoimze file in the bookinfo-team and append the following lines
 ```yaml
