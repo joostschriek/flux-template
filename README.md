@@ -47,7 +47,7 @@ If you checked out over https, flux really likes ssh, so you should run the init
 
 Now that we've deployed the infrastructure and the app, it's time to figure out how to access the app. In this example we're using an istio VirtualService which uses a `xip.io` route. You can see [the defintion here](https://github.com/ahanafy/bookinfo-kustomize/blob/master/bookinfo/networking/virtualservice.yaml#L7). What we need to do is tell kustomize to patch the route part of the VirtualService with our own IP so that we can access the app.
 
-First we have to figure out our LoadBalancer IP. We can do this with the following command (or you can look in the GCP web console).
+First we have to figure out our LoadBalancer IP. We can do this with the following command:
 ```
 kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 ```
