@@ -71,7 +71,7 @@ patchesStrategicMerge:
   - virtualservice-patch.yaml
 ```
 
-Now we only need to commit & push it, and see fluxcd do it's magic. We should soon be able to login with our new custom xip.io url. You'll want to repeat this for the windows-team as well.
+Now we only need to commit & push it, and see fluxcd do it's magic. We should soon be able to access bookinfo with our new custom xip.io url. You'll want to repeat this for the windows-team as well.
 
 ## **Bookinfo**
 
